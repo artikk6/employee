@@ -2,6 +2,7 @@ package ru.artemii.employee.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import ru.artemii.employee.enums.RoleAccess;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -18,13 +19,21 @@ public class EmployeeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(columnDefinition = "employee")
     private String firstname;
 
-    @Column(nullable = false)
+    @Column(columnDefinition = "company")
     private String lastname;
 
+    @Column(nullable = false, unique = true)
+    private String username;
+
     @Column(nullable = false)
+    private String password;
+
+    @Enumerated(EnumType.STRING)
+    private RoleAccess role;
+
     private LocalDate birthday;
 
     @Column(precision = 10, scale = 2)

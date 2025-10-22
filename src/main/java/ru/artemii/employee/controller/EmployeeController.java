@@ -1,12 +1,14 @@
 package ru.artemii.employee.controller;
 
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.artemii.employee.payload.EmployeePayload;
 import ru.artemii.employee.service.EmployeeService;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
@@ -21,17 +23,17 @@ public class EmployeeController {
     }
 
     @GetMapping("/")
-    public ResponseEntity<List<EmployeePayload>> getEmployees() {
-        return ResponseEntity.ok(employeeService.getEmployees());
+    public ResponseEntity<List<EmployeePayload>> getEmployees(@RequestParam(required = false) String sortBy) {
+        return ResponseEntity.ok(employeeService.getEmployees(sortBy));
     }
 
     @PostMapping("/")
-    public ResponseEntity<EmployeePayload> createEmployee(@RequestBody EmployeePayload employee) {
+    public ResponseEntity<EmployeePayload> createEmployee(@Valid @RequestBody EmployeePayload employee) {
         return ResponseEntity.ok(employeeService.addEmployee(employee));
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<EmployeePayload> updateEmployee(@PathVariable Long id, @RequestBody EmployeePayload employee) {
+    public ResponseEntity<EmployeePayload> updateEmployee(@PathVariable Long id, @Valid @RequestBody EmployeePayload employee) {
         return ResponseEntity.ok(employeeService.updateEmployee(id, employee));
     }
 
@@ -39,5 +41,15 @@ public class EmployeeController {
     public ResponseEntity<?> deleteEmployee(@PathVariable Long id) {
         employeeService.deleteEmployee(id);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/total-salary")
+    public ResponseEntity<BigDecimal> getTotalBudget() {
+        return ResponseEntity.ok(employeeService.getTotalBudget());
+    }
+
+    @GetMapping("/average-salary")
+    public ResponseEntity<Integer> getAverageBudget() {
+        return ResponseEntity.ok(employeeService.getAverageSalary());
     }
 }
